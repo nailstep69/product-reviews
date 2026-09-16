@@ -10,6 +10,9 @@
 
 <p>{{ product.description }}</p>
 
+<p>Дата создания: {{ product.created_at }}</p>
+
+
 <h2>Отзывы</h2>
 
 {% for review in reviews %}
@@ -18,8 +21,22 @@
         <p>Пользователь: {{ review.user.username }}</p>
         <p>Оценка: {{ review.rating }}</p>
         <p>{{ review.text }}</p>
-        <p>{{ review.created_at }}</p>
+        <p>Дата: {{ review.created_at }}</p>
+
+        {% if user == review.user %}
+
+            <a href="{% url 'review_edit' review.id %}">
+                Изменить
+            </a>
+
+            <a href="{% url 'review_delete' review.id %}">
+                Удалить
+            </a>
+
+        {% endif %}
     </div>
+
+    <hr>
 
 {% empty %}
 
@@ -27,7 +44,48 @@
 
 {% endfor %}
 
-<a href="{% url 'product_list' %}">Назад к продуктам</a>
+
+<h2>Оставить отзыв</h2>
+
+{% if user.is_authenticated %}
+
+    <p>Вы вошли как: <strong>{{ user.username }}</strong></p>
+
+    <a href="{% url 'logout' %}">Выйти</a>
+
+    <form method="post">
+        {% csrf_token %}
+
+        {{ form.as_p }}
+
+        <button type="submit">
+            Оставить отзыв
+        </button>
+    </form>
+
+{% else %}
+
+    <p>
+        Чтобы оставить отзыв, необходимо войти в аккаунт.
+    </p>
+
+    <a href="{% url 'login' %}">
+        Войти
+    </a>
+
+    <a href="{% url 'register' %}">
+        Зарегистрироваться
+    </a>
+
+{% endif %}
+
+
+<br>
+<br>
+
+<a href="{% url 'product_list' %}">
+    Назад к продуктам
+</a>
 
 </body>
 </html>

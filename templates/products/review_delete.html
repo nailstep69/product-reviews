@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Удаление отзыва</title>
+</head>
+<body>
+
+<h1>Удалить отзыв?</h1>
+
+<p>{{ review.text }}</p>
+
+<form method="post">
+    {% csrf_token %}
+
+    <button type="submit">Да, удалить</button>
+</form>
+
+<a href="{% url 'product_detail' review.product.id %}">
+    Отмена
+</a>
+
+</body>
+</html>
